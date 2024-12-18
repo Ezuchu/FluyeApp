@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -44,6 +46,18 @@ class _MyHomePageState extends State<MyHomePage> {
     {
       setState(() {
         _data = response.body;
+      });
+    }
+  }
+
+  _postdata() async
+  {
+    var url = Uri.parse("http://localhost/Sistemas-Valid/Users/Adm/habitaciones/Registros.php");
+    var response = await http.post(url,body : jsonEncode(<String,Object>{'id' : 3, 'N' : 300}));
+    if(response.statusCode == 200)
+    {
+      setState(() {
+        _data = "ui";
       });
     }
   }
@@ -107,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _getdata,
+        onPressed: _postdata,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
