@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:async';
 
 void main() {
   runApp(const MyApp());
@@ -37,6 +38,28 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   String _data = "_";
+  Timer? _timer;
+
+  @override
+  void initState(){
+    super.initState();
+    _iniciarTimer();
+  }
+
+  @override  
+  void dispose()
+  {
+    _timer!.cancel();
+    super.dispose();
+  }
+
+  _iniciarTimer()
+  {
+    _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer)
+    {
+      _getdata();
+    });
+  }
 
   _getdata() async
   {
