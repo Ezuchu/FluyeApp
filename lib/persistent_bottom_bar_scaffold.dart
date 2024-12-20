@@ -4,8 +4,7 @@ class PersistentBottomBarScaffold extends StatefulWidget {
   /// pass the required items for the tabs and BottomNavigationBar
   final List<PersistentTabItem> items;
 
-  const PersistentBottomBarScaffold({Key? key, required this.items})
-      : super(key: key);
+  const PersistentBottomBarScaffold({super.key, required this.items});
 
   @override
   _PersistentBottomBarScaffoldState createState() =>
