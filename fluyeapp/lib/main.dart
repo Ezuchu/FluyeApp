@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _getdata() async
   {
-    var url = Uri.parse("http://localhost/Sistemas-Valid/Users/Adm/habitaciones/Registros.php?id=3");
+    var url = Uri.parse("http://localhost/fluye/consultas.php?id=1");
     var response = await http.get(url);
     if(response.statusCode == 200)
     {
@@ -75,8 +75,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _postdata() async
   {
-    var url = Uri.parse("http://localhost/Sistemas-Valid/Users/Adm/habitaciones/Registros.php");
-    var response = await http.post(url,body : jsonEncode(<String,Object>{'id' : 3, 'N' : 300}));
+    var url = Uri.parse("http://localhost/fluye/consultas.php");
+    var response = await http.post(url,body : jsonEncode(<String,Object>{'id' : 1, 'N' : 10}));
     if(response.statusCode == 200)
     {
       setState(() {
