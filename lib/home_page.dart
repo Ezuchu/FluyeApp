@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
           navigatorkey: _tab1navigatorKey,
         ),
         PersistentTabItem(
-          tab: TabPage2(),
+          tab: const TabPage3(), // Cambiamos TabPage2 a TabPage3
           icon: Icons.water_drop,
           title: '',
           navigatorkey: _tab2navigatorKey,
@@ -55,7 +55,7 @@ class TabPage1 extends StatelessWidget {
                   icon: const Icon(Icons.notifications),
                   onPressed: () {},
                 ),
-                CircleAvatar(
+                const CircleAvatar(
                   backgroundImage: AssetImage('assets/profile.jpg'), // Ajusta esta ruta a la imagen del perfil.
                 ),
               ],
@@ -85,10 +85,10 @@ class TabPage1 extends StatelessWidget {
                 color: Colors.blue,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'EICA',
                     style: TextStyle(
                       fontSize: 20,
@@ -96,16 +96,16 @@ class TabPage1 extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text('Bomba 1: Apagado', style: TextStyle(color: Colors.white)),
                       Text('Bomba 2: Activo', style: TextStyle(color: Colors.white)),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  const Text('Presión promedio: 50 psi', style: TextStyle(color: Colors.white)),
+                  SizedBox(height: 8),
+                  Text('Presión promedio: 50 psi', style: TextStyle(color: Colors.white)),
                 ],
               ),
             ),
@@ -145,7 +145,13 @@ class TabPage1 extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const TabPage2(), // Navega a TabPage2
+                          ),
+                        );
+                      },
                       child: const Text('Ver más'),
                     ),
                   ),
@@ -166,19 +172,183 @@ class TabPage2 extends StatelessWidget {
   Widget build(BuildContext context) {
     print('TabPage2 build');
     return Scaffold(
-      appBar: AppBar(title: const Text('Tab 2')),
-      body: SizedBox(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Tab 2'),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const Page2('tab2')));
-                },
-                child: const Text('Go to page2'))
+            Row(
+              children: [
+                Image.asset(
+                  'assets/logo.png', // Ajusta esta ruta al logo de tu aplicación.
+                  height: 30,
+                ),
+                const SizedBox(width: 8),
+                const Text('Fluye'),
+              ],
+            ),
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.notifications),
+                  onPressed: () {},
+                ),
+                const CircleAvatar(
+                  backgroundImage: AssetImage('assets/profile.jpg'), // Ajusta esta ruta a la imagen del perfil.
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      const CircularProgressIndicator(
+                        value: 0.5, // Porcentaje de progreso (0.5 = 50%)
+                        backgroundColor: Colors.white24,
+                        color: Colors.white,
+                        strokeWidth: 8,
+                      ),
+                      Text(
+                        '50%', // El porcentaje dentro del círculo
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Tanque 1',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Capacidad: 5000 lt',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Bomba: Encendida',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Estado: Llenándose',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      const CircularProgressIndicator(
+                        value: 0.25, // Porcentaje de progreso (0.5 = 50%)
+                        backgroundColor: Colors.white24,
+                        color: Colors.white,
+                        strokeWidth: 8,
+                      ),
+                      Text(
+                        '25%', // El porcentaje dentro del círculo
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Tanque 2',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Capacidad: 120 lt',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Bomba: Apagada',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Estado: Llenándose',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
