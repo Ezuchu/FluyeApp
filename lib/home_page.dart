@@ -42,11 +42,11 @@ class TabPage1 extends StatelessWidget {
             Row(
               children: [
                 Image.asset(
-                  'assets/logo.png', // Ajusta esta ruta al logo de tu aplicación.
+                  'assets/logo-udoteclabedit.png', // Ajusta esta ruta al logo de tu aplicación.
                   height: 30,
                 ),
                 const SizedBox(width: 8),
-                const Text('Fluye'),
+                const Text('FluyeApp'),
               ],
             ),
             Row(
@@ -56,7 +56,7 @@ class TabPage1 extends StatelessWidget {
                   onPressed: () {},
                 ),
                 CircleAvatar(
-                  backgroundImage: AssetImage('assets/profile.jpg'), // Ajusta esta ruta a la imagen del perfil.
+                  backgroundImage: AssetImage('assets/profile.png'), // Ajusta esta ruta a la imagen del perfil.
                 ),
               ],
             ),
