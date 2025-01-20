@@ -36,26 +36,27 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  String _data = "_";
+  
+  String _data = "";
+  String _accion = "";
   Timer? _timer;
 
   @override
   void initState(){
     super.initState();
-    _iniciarTimer();
+    _getdata();
   }
 
-  @override  
+  /*@override  
   void dispose()
   {
     _timer!.cancel();
     super.dispose();
-  }
+  }*/
 
   _iniciarTimer()
   {
-    _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer)
+    _timer = Timer.periodic(const Duration(seconds: 10), (Timer timer)
     {
       _getdata();
     });
@@ -68,7 +69,15 @@ class _MyHomePageState extends State<MyHomePage> {
     if(response.statusCode == 200)
     {
       setState(() {
-        _data = response.body;
+        _data = jsonDecode(response.body);
+      });
+      String acc = "1";
+      if(_data == "1")
+      {
+        acc = "0";
+      }
+      setState(() {
+        _accion = acc;
       });
     }
   }
@@ -76,25 +85,14 @@ class _MyHomePageState extends State<MyHomePage> {
   _postdata() async
   {
     var url = Uri.parse("http://localhost/fluye/consultas.php");
-    var response = await http.post(url,body : jsonEncode(<String,Object>{'id' : 1, 'N' : 10}));
+    var response = await http.post(url,body : jsonEncode(<String,Object>{'id' : 1, 'N' : int.parse(_accion)}));
     if(response.statusCode == 200)
     {
-      setState(() {
-        _data = "ui";
-      });
+      _getdata();
     }
   }
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_data',
             ),
             Text(
-              '$_counter',
+              '$_accion',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
