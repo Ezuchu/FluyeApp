@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluyeapp/home_page.dart';
+import 'package:fluyeapp/welcome_screen.dart'; // Importa la pantalla de bienvenida
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +14,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      // Cambia la pantalla inicial a WelcomeScreen
+      home: WelcomeScreen(),
     );
   }
 }
