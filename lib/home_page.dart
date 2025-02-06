@@ -179,7 +179,7 @@ class TabPage2 extends StatelessWidget {
             Row(
               children: [
                 Image.asset(
-                  'assets/logo.png', // Ajusta esta ruta al logo de tu aplicación.
+                  'assets/logo-udoteclabedit.png', // Ajusta esta ruta al logo de tu aplicación.
                   height: 30,
                 ),
                 const SizedBox(width: 8),
