@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fluyeapp/persistent_bottom_bar_scaffold.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 class HomePage extends StatelessWidget {
   final _tab1navigatorKey = GlobalKey<NavigatorState>();
   final _tab2navigatorKey = GlobalKey<NavigatorState>();
 
   HomePage({super.key});
+  
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +31,7 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
 
 class TabPage1 extends StatelessWidget {
   const TabPage1({super.key});
@@ -148,7 +153,7 @@ class TabPage1 extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const TabPage2(), // Navega a TabPage2
+                            builder: (context) => TabPage2(), // Navega a TabPage2
                           ),
                         );
                       },
@@ -165,12 +170,68 @@ class TabPage1 extends StatelessWidget {
   }
 }
 
-class TabPage2 extends StatelessWidget {
-  const TabPage2({super.key});
+
+
+class TabPage2 extends StatefulWidget {
+  
+  
+
+
+
+  TabPage2({super.key});
+
+  State<StatefulWidget> createState() => _TabPage2State();
+
+  
+  
+}
+
+class _TabPage2State extends State<TabPage2>
+{
+  int proceso = 0;
+  String estado = '';
+
+  @override
+  initState(){
+    super.initState();
+    _get_tanque();
+  }
+
+  _get_tanque() async{
+    // URL de la API
+    final url = Uri.parse('http://localhost/fluye/tanque.php?proceso=1&id=1');
+
+    try {
+      // Realiza la solicitud GET
+      final response = await http.get(url);
+
+      // Verifica si la solicitud fue exitosa (código 200)
+      if (response.statusCode == 200) {
+        // Decodifica el JSON
+        final Map<String, dynamic> data = json.decode(response.body);
+
+        // Asigna los valores a las variables
+
+        setState(() {
+          proceso = int.parse(data['proceso']);
+          estado = data['estado'];
+        });
+
+        print(proceso);
+
+        // Aquí puedes hacer lo que necesites con las variables proceso y estado
+      } else {
+        // Si la solicitud no fue exitosa, imprime el código de estado
+        print('Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Captura cualquier excepción que ocurra durante la solicitud
+      print('Excepción: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    print('TabPage2 build');
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -193,7 +254,7 @@ class TabPage2 extends StatelessWidget {
                   onPressed: () {},
                 ),
                 const CircleAvatar(
-                  backgroundImage: AssetImage('assets/profile.jpg'), // Ajusta esta ruta a la imagen del perfil.
+                  backgroundImage: AssetImage('assets/profile.png'), // Ajusta esta ruta a la imagen del perfil.
                 ),
               ],
             ),
@@ -213,19 +274,19 @@ class TabPage2 extends StatelessWidget {
                 color: Colors.blue,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Row(
+              child: Row(
                 children: [
                   Stack(
                     alignment: Alignment.center,
                     children: [
                       CircularProgressIndicator(
-                        value: 0.5, // Porcentaje de progreso (0.5 = 50%)
+                        value: proceso/100, // Porcentaje de progreso (0.5 = 50%)
                         backgroundColor: Colors.white24,
                         color: Colors.white,
                         strokeWidth: 8,
                       ),
                       Text(
-                        '50%', // El porcentaje dentro del círculo
+                        '$proceso%', // El porcentaje dentro del círculo
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -234,7 +295,7 @@ class TabPage2 extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,7 +326,7 @@ class TabPage2 extends StatelessWidget {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          'Estado: Llenándose',
+                          'Estado: $estado',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.white,
