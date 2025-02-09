@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "/home/xorn714/AndroidStudioProjects/FluyeApp/linux"
+    "cmake.sourceDirectory": "/home/xorn714/AndroidStudioProjects/FluyeApp/linux",
+    "cmake.ignoreCMakeListsMissing": true
 }
