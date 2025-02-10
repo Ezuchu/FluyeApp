@@ -12,9 +12,9 @@ class BottomBomba extends StatefulWidget {
 
 class _BottomBombaState extends State<BottomBomba> {
   bool isOn = false; // Estado de la bomba (encendido o apagado)
-  double porcentaje = 75.0; // Porcentaje de llenado
-  double cantidadMl = 1500.0; // Cantidad de mililitros
-  double limiteTanque = 2000.0; // Límite de capacidad del tanque
+  int porcentaje = 75; // Porcentaje de llenado
+  double cantidadMl = 1500; // Cantidad de mililitros
+  int limiteTanque = 2000; // Límite de capacidad del tanque
 
   @override
   void initState() {
@@ -23,7 +23,7 @@ class _BottomBombaState extends State<BottomBomba> {
   }
 
   _getDatosBomba() async {
-    var url = Uri.parse("http://localhost/fluye/GetPump.php?num=1&proceso=1");
+    var url = Uri.parse("http://localhost/fluye/bomba?num=1&proceso=1");
     var response = await http.get(url);
     if(response.statusCode == 200)
     {
@@ -40,6 +40,11 @@ class _BottomBombaState extends State<BottomBomba> {
           isOn = false;
         });
       }
+      setState(() {
+        porcentaje = int.parse(resultado['proceso']);
+        limiteTanque = int.parse(resultado['capacidad'])*1000;
+        cantidadMl = ((porcentaje * limiteTanque) / 100);
+      });
     }
   }
 
