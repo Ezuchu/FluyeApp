@@ -183,12 +183,26 @@ class _TabPage2State extends State<TabPage2> {
   int proceso = 0;
   String estado = '';
   List<dynamic> lista = [];
+  Timer? timer;
 
   @override
   initState() {
     super.initState();
-    _get_tanque();
     _get_lista();
+    _iniciarTimer();
+  }
+
+  _iniciarTimer()
+  {
+    timer = Timer.periodic(const Duration(seconds: 15), (timer) {
+      _get_lista();
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   _get_lista() async {
@@ -209,36 +223,7 @@ class _TabPage2State extends State<TabPage2> {
     }
   }
 
-  _get_tanque() async {
-    // URL de la API
-    final url = Uri.parse('http://localhost/fluye/tanque.php?proceso=1&id=1');
-
-    try {
-      // Realiza la solicitud GET
-      final response = await http.get(url);
-
-      // Verifica si la solicitud fue exitosa (código 200)
-      if (response.statusCode == 200) {
-        // Decodifica el JSON
-        final Map<String, dynamic> data = json.decode(response.body);
-
-        // Asigna los valores a las variables
-
-        setState(() {
-          proceso = int.parse(data['proceso']);
-          estado = data['estado'];
-        });
-
-        // Aquí puedes hacer lo que necesites con las variables proceso y estado
-      } else {
-        // Si la solicitud no fue exitosa, imprime el código de estado
-        print('Error: ${response.statusCode}');
-      }
-    } catch (e) {
-      // Captura cualquier excepción que ocurra durante la solicitud
-      print('Excepción: $e');
-    }
-  }
+  
 
   
 

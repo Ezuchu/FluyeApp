@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -15,11 +16,26 @@ class _BottomBombaState extends State<BottomBomba> {
   int porcentaje = 75; // Porcentaje de llenado
   double cantidadMl = 1500; // Cantidad de mililitros
   int limiteTanque = 2000; // Límite de capacidad del tanque
+  Timer? timer;
 
   @override
   void initState() {
     super.initState();
     _getDatosBomba();
+    _iniciarTimer();
+  }
+
+  _iniciarTimer()
+  {
+    timer = Timer.periodic(const Duration(seconds: 15), (timer) {
+      _getDatosBomba();
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   _getDatosBomba() async {
