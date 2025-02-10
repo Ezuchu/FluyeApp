@@ -193,6 +193,7 @@ class _TabPage2State extends State<TabPage2> {
 
   _get_lista() async {
     final url = Uri.parse('http://localhost/fluye/tanqueLista.php?proceso=1');
+    
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {

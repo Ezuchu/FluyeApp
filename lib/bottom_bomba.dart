@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class BottomBomba extends StatefulWidget {
   const BottomBomba({super.key});
@@ -9,13 +12,54 @@ class BottomBomba extends StatefulWidget {
 
 class _BottomBombaState extends State<BottomBomba> {
   bool isOn = false; // Estado de la bomba (encendido o apagado)
+  double porcentaje = 75.0; // Porcentaje de llenado
+  double cantidadMl = 1500.0; // Cantidad de mililitros
+  double limiteTanque = 2000.0; // Límite de capacidad del tanque
+
+  @override
+  void initState() {
+    super.initState();
+    _getDatosBomba();
+  }
+
+  _getDatosBomba() async {
+    var url = Uri.parse("http://localhost/fluye/GetPump.php?num=1&proceso=1");
+    var response = await http.get(url);
+    if(response.statusCode == 200)
+    {
+      final Map<String,dynamic> resultado =jsonDecode(response.body);
+      if(resultado['estado']== 'on')
+      {
+        setState(() {
+          isOn = true;
+        });
+      }
+      else
+      {
+        setState(() {
+          isOn = false;
+        });
+      }
+    }
+  }
+
+  _accionarBomba() async
+  {
+    String estado = isOn ? "off" : "on";
+    print(estado);
+    var url = Uri.parse("http://localhost/fluye/PutPump.php");
+    final response = await http.put(url, body: jsonEncode(<String,Object>{'cod_proceso': 1, 'num_bomba': 1, 'estado': estado}));
+    if(response.statusCode == 200)
+    {
+      _getDatosBomba();
+    }else{
+      print('Error al cambiar el estado de la bomba');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     // Ejemplo de valores que puedes usar (asegúrate de tener estos valores disponibles o pásalos como parámetros)
-    double porcentaje = 75.0; // Porcentaje de llenado
-    double cantidadMl = 1500.0; // Cantidad de mililitros
-    double limiteTanque = 2000.0; // Límite de capacidad del tanque
 
     return Scaffold(
       appBar: AppBar(
@@ -68,14 +112,7 @@ class _BottomBombaState extends State<BottomBomba> {
             const Spacer(),
             // Botón de encendido y apagado en la parte inferior con ícono
             ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  // Alternar el estado de la bomba
-                  isOn = !isOn;
-                });
-                // Aquí puedes agregar la lógica para encender o apagar la bomba
-                print(isOn ? "Bomba encendida" : "Bomba apagada");
-              },
+              onPressed: _accionarBomba,
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(20), // Ajusta el tamaño del botón
                 shape: const CircleBorder(), // Forma circular
