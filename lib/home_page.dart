@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluyeapp/ip.dart';
 import 'package:fluyeapp/persistent_bottom_bar_scaffold.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -165,6 +166,10 @@ class TabPage1 extends StatelessWidget {
                 ],
               ),
             ),
+            TextField(
+              controller: TextEditingController(),
+              onChanged: (value) => ip = value,
+            )
           ],
         ),
       ),
@@ -188,6 +193,7 @@ class _TabPage2State extends State<TabPage2> {
   @override
   initState() {
     super.initState();
+    print(ip);
     _get_lista();
     _iniciarTimer();
   }
@@ -206,7 +212,7 @@ class _TabPage2State extends State<TabPage2> {
   }
 
   _get_lista() async {
-    final url = Uri.parse('http://localhost/fluye/tanqueLista.php?proceso=1');
+    final url = Uri.parse('http://$ip/fluye/tanqueLista.php?proceso=1');
     
     try {
       final response = await http.get(url);

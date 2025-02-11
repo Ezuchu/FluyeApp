@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:fluyeapp/ip.dart';
 import 'package:http/http.dart' as http;
 
 class BottomBomba extends StatefulWidget {
@@ -39,7 +40,7 @@ class _BottomBombaState extends State<BottomBomba> {
   }
 
   _getDatosBomba() async {
-    var url = Uri.parse("http://localhost/fluye/bomba?num=1&proceso=1");
+    var url = Uri.parse("http://$ip/fluye/bomba?num=1&proceso=1");
     var response = await http.get(url);
     if(response.statusCode == 200)
     {
@@ -68,7 +69,7 @@ class _BottomBombaState extends State<BottomBomba> {
   {
     String estado = isOn ? "off" : "on";
     print(estado);
-    var url = Uri.parse("http://localhost/fluye/PutPump.php");
+    var url = Uri.parse("http://$ip/fluye/PutPump.php");
     final response = await http.put(url, body: jsonEncode(<String,Object>{'cod_proceso': 1, 'num_bomba': 1, 'estado': estado}));
     if(response.statusCode == 200)
     {
