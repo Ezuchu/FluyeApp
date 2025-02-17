@@ -40,7 +40,7 @@ class _BottomBombaState extends State<BottomBomba> {
   }
 
   _getDatosBomba() async {
-    var url = Uri.parse("http://$ip/fluye/bomba?num=1&proceso=1");
+    var url = Uri.parse("http://$ip/fluye/bomba.php?num=1&proceso=1");
     var response = await http.get(url);
     if(response.statusCode == 200)
     {
