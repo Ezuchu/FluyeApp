@@ -198,8 +198,7 @@ class _TabPage2State extends State<TabPage2> {
     _iniciarTimer();
   }
 
-  _iniciarTimer()
-  {
+  _iniciarTimer() {
     timer = Timer.periodic(const Duration(seconds: 15), (timer) {
       _get_lista();
     });
@@ -213,7 +212,7 @@ class _TabPage2State extends State<TabPage2> {
 
   _get_lista() async {
     final url = Uri.parse('http://$ip/fluye/tanqueLista.php?proceso=1');
-    
+
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -228,10 +227,6 @@ class _TabPage2State extends State<TabPage2> {
       print('Excepción: $e');
     }
   }
-
-  
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -283,16 +278,25 @@ class _TabPage2State extends State<TabPage2> {
                       Stack(
                         alignment: Alignment.center,
                         children: [
-                          CircularProgressIndicator(
-                            value: int.parse(lista[index]['proceso']) / 100,
-                            backgroundColor: Colors.white24,
-                            color: Colors.white,
-                            strokeWidth: 8,
+                          SizedBox(
+                            width: 100, // Ajusta el tamaño según sea necesario
+                            height: 100, // Ajusta el tamaño según sea necesario
+                            child: CircularProgressIndicator(
+                              value: int.parse(lista[index]['proceso']) / 100,
+                              backgroundColor: Colors
+                                  .white, // Cambia el color de fondo a blanco
+                              color: int.parse(lista[index]['proceso']) <= 25
+                                  ? Colors.red
+                                  : int.parse(lista[index]['proceso']) <= 75
+                                      ? Colors.yellow
+                                      : Colors.green,
+                              strokeWidth: 8,
+                            ),
                           ),
                           Text(
                             '${lista[index]['proceso']}%',
                             style: const TextStyle(
-                              fontSize: 20,
+                              fontSize: 24, // Aumenta el tamaño del texto
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
