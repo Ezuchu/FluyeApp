@@ -12,6 +12,8 @@ class HomePage extends StatelessWidget {
 
   HomePage({super.key});
 
+  
+
   @override
   Widget build(BuildContext context) {
     return PersistentBottomBarScaffold(items: [
@@ -31,8 +33,49 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class TabPage1 extends StatelessWidget {
+class TabPage1 extends StatefulWidget {
   const TabPage1({super.key});
+  
+  @override
+  State<StatefulWidget> createState() =>_TabPage1State();
+}
+
+class _TabPage1State extends State<TabPage1>
+{
+  List<dynamic> listaBomba = [{'estado': 'off','proceso' : 100, 'capacidad': 0}];
+  Map<String,String> estados= {'off' : 'apagado', 'on' : 'encendido'};
+  Timer? timer;
+
+  @override
+  initState() {
+    super.initState();
+    _getDatosBomba();
+    _iniciarTimer();
+  }
+
+  _iniciarTimer() {
+    timer = Timer.periodic(const Duration(seconds: 15), (timer) {
+      _getDatosBomba();
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  _getDatosBomba() async {
+    var url = Uri.parse("http://192.168.1.20/fluye/bomba.php?num=1&proceso=1");
+    var response = await http.get(url);
+    if(response.statusCode == 200)
+    {
+      setState(() {
+        listaBomba[0] = jsonDecode(response.body);
+      }); 
+    }
+    print(listaBomba[0]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +132,7 @@ class TabPage1 extends StatelessWidget {
                 color: Colors.blue,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -104,14 +147,13 @@ class TabPage1 extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Bomba 1: Apagado',
-                          style: TextStyle(color: Colors.white)),
-                      Text('Bomba 2: Activo',
-                          style: TextStyle(color: Colors.white)),
+                      Text('Bomba : ${estados[listaBomba[0]['estado']!]}',
+                          style: TextStyle(color: Colors.white))
+                      
                     ],
                   ),
                   SizedBox(height: 8),
-                  Text('Presión promedio: 50 psi',
+                  Text('',
                       style: TextStyle(color: Colors.white)),
                 ],
               ),
@@ -144,8 +186,8 @@ class TabPage1 extends StatelessWidget {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    'Estado: Activo',
+                  Text(
+                    'Estado: ${estados[listaBomba[0]['estado']!]}',
                     style: TextStyle(color: Colors.grey),
                   ),
                   const SizedBox(height: 8),
@@ -188,6 +230,7 @@ class _TabPage2State extends State<TabPage2> {
   int proceso = 0;
   String estado = '';
   List<dynamic> lista = [];
+  List<dynamic> listaBomba = [{'estado': 'off','proceso' : 100, 'capacidad': 0}];
   Timer? timer;
 
   @override
@@ -195,12 +238,14 @@ class _TabPage2State extends State<TabPage2> {
     super.initState();
     print(ip);
     _get_lista();
+    _getDatosBomba();
     _iniciarTimer();
   }
 
   _iniciarTimer() {
     timer = Timer.periodic(const Duration(seconds: 15), (timer) {
       _get_lista();
+      _getDatosBomba();
     });
   }
 
@@ -208,6 +253,18 @@ class _TabPage2State extends State<TabPage2> {
   void dispose() {
     timer?.cancel();
     super.dispose();
+  }
+
+  _getDatosBomba() async {
+    var url = Uri.parse("http://$ip/fluye/bomba.php?num=1&proceso=1");
+    var response = await http.get(url);
+    if(response.statusCode == 200)
+    {
+      setState(() {
+        listaBomba[0] = jsonDecode(response.body);
+      }); 
+    }
+    print(listaBomba[0]);
   }
 
   _get_lista() async {
@@ -373,7 +430,7 @@ class _TabPage2State extends State<TabPage2> {
                   ),
                 ],
               ),
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -386,7 +443,7 @@ class _TabPage2State extends State<TabPage2> {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    'Tanque: 1500 lt',
+                    'Tanque: ${listaBomba[0]['capacidad']!} lt',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -394,7 +451,7 @@ class _TabPage2State extends State<TabPage2> {
                     ),
                   ),
                   Text(
-                    'Tiempo: 35 min',
+                    '',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -410,7 +467,7 @@ class _TabPage2State extends State<TabPage2> {
                     ),
                   ),
                   Text(
-                    'Estado: Activo',
+                    'Estado: ${listaBomba[0]['estado']!}',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
