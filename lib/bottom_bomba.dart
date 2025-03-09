@@ -79,80 +79,100 @@ class _BottomBombaState extends State<BottomBomba> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // Ejemplo de valores que puedes usar (asegúrate de tener estos valores disponibles o pásalos como parámetros)
+ @override
+Widget build(BuildContext context) {
+  // Ejemplo de valores que puedes usar (asegúrate de tener estos valores disponibles o pásalos como parámetros)
+  double alturaTanque = 200.0; // Altura del tanque en píxeles
+  double nivelAgua = (cantidadMl / limiteTanque) * alturaTanque; // Nivel de agua en píxeles
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Bomba del Tanque'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment
-              .start, // Alinea el contenido en la parte superior
-          crossAxisAlignment:
-              CrossAxisAlignment.center, // Centrado horizontalmente
-          children: [
-            // Mostrar porcentaje en negrita junto con cantidad de mililitros
-            Row(
-              mainAxisAlignment: MainAxisAlignment
-                  .center, // Centrado de los elementos dentro de Row
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('Bomba del Tanque'),
+    ),
+    body: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start, // Alinea el contenido en la parte superior
+        crossAxisAlignment: CrossAxisAlignment.center, // Centrado horizontalmente
+        children: [
+          // Mostrar porcentaje en negrita junto con cantidad de mililitros
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center, // Centrado de los elementos dentro de Row
+            children: [
+              Text(
+                '${porcentaje.toStringAsFixed(0)}%',
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '${cantidadMl.toStringAsFixed(0)} ml',
+                style: const TextStyle(fontSize: 18),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // Mostrar límite de tanque centrado
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center, // Centrado de los elementos dentro de Row
+            children: [
+              const Text(
+                'Límite de tanque: ',
+                style: TextStyle(fontSize: 18),
+              ),
+              Text(
+                '${limiteTanque.toStringAsFixed(0)} ml',
+                style: const TextStyle(fontSize: 18, color: Colors.red),
+              ),
+            ],
+          ),
+          const SizedBox(height: 32),
+          // Visualización del tanque de agua
+          Container(
+            height: alturaTanque,
+            width: 100, // Ancho del tanque
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.blue, width: 2),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Stack(
+              alignment: Alignment.bottomCenter,
               children: [
-                Text(
-                  '${porcentaje.toStringAsFixed(0)}%',
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  '${cantidadMl.toStringAsFixed(0)} ml',
-                  style: const TextStyle(fontSize: 18),
+                ClipRect(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    heightFactor: nivelAgua / alturaTanque,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            // Mostrar límite de tanque centrado
-            Row(
-              mainAxisAlignment: MainAxisAlignment
-                  .center, // Centrado de los elementos dentro de Row
-              children: [
-                const Text(
-                  'Límite de tanque: ',
-                  style: TextStyle(fontSize: 18),
-                ),
-                Text(
-                  '${limiteTanque.toStringAsFixed(0)} ml',
-                  style: const TextStyle(fontSize: 18, color: Colors.red),
-                ),
-              ],
+          ),
+          const SizedBox(height: 32),
+          // Espaciador para empujar el botón hacia abajo
+          const Spacer(),
+          // Botón de encendido y apagado en la parte inferior con ícono
+          ElevatedButton(
+            onPressed: _accionarBomba,
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.all(20), // Ajusta el tamaño del botón
+              shape: const CircleBorder(), // Forma circular
+              backgroundColor: isOn ? Colors.green : Colors.red, // Color de fondo basado en el estado
             ),
-            const SizedBox(
-                height: 32), // Espacio adicional entre el contenido y el botón
-            // Espaciador para empujar el botón hacia abajo
-            const Spacer(),
-            // Botón de encendido y apagado en la parte inferior con ícono
-            ElevatedButton(
-              onPressed: _accionarBomba,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(20), // Ajusta el tamaño del botón
-                shape: const CircleBorder(), // Forma circular
-                backgroundColor: isOn
-                    ? Colors.green
-                    : Colors.red, // Color de fondo basado en el estado
-              ),
-              child: Icon(
-                Icons
-                    .power_settings_new, // Mantenemos el ícono de encendido/apagado
-                size: 50, // Ajusta el tamaño del ícono
-                color: Colors.white, // Color del ícono
-              ),
+            child: Icon(
+              Icons.power_settings_new, // Mantenemos el ícono de encendido/apagado
+              size: 50, // Ajusta el tamaño del ícono
+              color: Colors.white, // Color del ícono
             ),
-            const SizedBox(height: 32), // Espacio adicional debajo del botón
-          ],
-        ),
+          ),
+          const SizedBox(height: 32), // Espacio adicional debajo del botón
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

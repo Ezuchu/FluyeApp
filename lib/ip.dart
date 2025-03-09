@@ -1,1 +1,1 @@
-String ip = "";
+String ip = "localhost";
