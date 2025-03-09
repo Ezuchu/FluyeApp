@@ -140,7 +140,7 @@ Widget build(BuildContext context) {
                 ClipRect(
                   child: Align(
                     alignment: Alignment.bottomCenter,
-                    heightFactor: nivelAgua / alturaTanque,
+                    heightFactor: double.parse(porcentaje.toString()) / 100,
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.blue,
