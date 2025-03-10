@@ -66,7 +66,7 @@ class _TabPage1State extends State<TabPage1>
   }
 
   _getDatosBomba() async {
-    var url = Uri.parse("http://192.168.1.20/fluye/bomba.php?num=1&proceso=1");
+    var url = Uri.parse("http://$ip/fluye/bomba.php?num=1&proceso=1");
     var response = await http.get(url);
     if(response.statusCode == 200)
     {
@@ -207,10 +207,6 @@ class _TabPage1State extends State<TabPage1>
                   ),
                 ],
               ),
-            ),
-            TextField(
-              controller: TextEditingController(),
-              onChanged: (value) => ip = value,
             )
           ],
         ),
